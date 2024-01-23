@@ -14,10 +14,9 @@ class Archivo extends Model
     const PHP = "php";
     const JS = "javascript";
     protected $fillable = [
+        'titulo',
         'fecha',
         'diagrama',
-        'tipo',
-        'url',
         'user_id',
         'pizarra_id'
     ];

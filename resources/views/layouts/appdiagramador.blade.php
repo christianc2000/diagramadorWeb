@@ -37,7 +37,7 @@
         // let ip_address = "192.168.0.14"
         let ip_address = "https://diagramadorsocket.onrender.com"
         // let port = "3000";
-        let socket = io(ip_address);// + ":" + port);
+        let socket = io(ip_address); // + ":" + port);
         // let socket = io(ip_address + ":" + port);
     </script>
     {{-- bootstrap 5 --}}
@@ -97,7 +97,7 @@
                                         <span class="absolute -inset-1.5"></span>
                                         <span class="sr-only">Open user menu</span>
                                         @auth
-                                            <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->foto }}"
+                                            <img class="h-8 w-8 rounded-full object-cover" src="{{ isset(Auth::user()->foto)?Auth::user()->foto:asset('estilos_tecno/img/user_logo.png') }}"
                                                 alt="">
 
                                         @endauth
@@ -201,7 +201,7 @@
                     @auth
                         <div class="flex items-center px-5">
                             <div class="flex-shrink-0">
-                                <img class="h-10 w-10 rounded-full" src="{{ Auth::user()->foto }}" alt="">
+                                <img class="h-10 w-10 rounded-full" src="{{  isset(Auth::user()->foto)?Auth::user()->foto:asset('estilos_tecno/img/user_logo.png') }}}}" alt="">
                             </div>
                             <div class="ml-3">
                                 <div class="text-base font-medium leading-none text-white">{{ Auth::user()->name }}
@@ -291,21 +291,23 @@
     </div>
     @if (Route::is('sesion.show') || Route::is('sesion.other.show') || Route::is('sesion.pizarra'))
         <script>
-             let usuariosPrevios = []; //usuarios que se conectan
-                var show = $("#sesion-title");
-                console.log("iniciando: ", show);
-                var pizarra='';
-                if (show.length == 0) {
-                    console.log("está en la pantalla de la pizarra");
-                    show = $("#contenedor-diagrama");
-                    pizarra=show.data('pizarra');
-                    console.log(show);
-                } else {
-                    console.log("está en show y other show");
-                }
-                var userId = show.data('user');
-                var sesionId = show.data('sesion');
-                var estado = show.data('estado');
+            var isPizarraRoute = <?php echo Route::is('sesion.pizarra') ? 'true' : 'false'; ?>;
+            console.log("is pizarra: ",isPizarraRoute);
+            let usuariosPrevios = []; //usuarios que se conectan
+            var show = $("#sesion-title");
+            console.log("iniciando: ", show);
+            var pizarra = '';
+            if (show.length == 0) {
+                console.log("está en la pantalla de la pizarra");
+                show = $("#contenedor-diagrama");
+                pizarra = show.data('pizarra');
+                console.log(show);
+            } else {
+                console.log("está en show y other show");
+            }
+            var userId = show.data('user');
+            var sesionId = show.data('sesion');
+            var estado = show.data('estado');
             $(document).ready(function() {
                 // let usuariosPrevios = []; //usuarios que se conectan
                 // var show = $("#sesion-title");
@@ -473,6 +475,7 @@
                 }
             });
         </script>
+        <script src="{{ asset('estilos_tecno/js/secuencia.js') }}"></script>
     @endif
     @if (Route::is('sesion.show'))
         <script>
@@ -591,8 +594,7 @@
     @endif
 
     @if (Route::is('sesion.pizarra'))
-      
-        <script src="{{ asset('estilos_tecno/js/secuencia.js') }}"></script>
+        {{-- <script src="{{ asset('estilos_tecno/js/secuencia.js') }}"></script> --}}
     @endif
     @if (Route::is('sesion.other.show'))
         <script>
@@ -669,7 +671,7 @@
                     $('input[name="respuesta"]').val('Rechazada');
                     $('#form-invitacion').submit();
                 });
-                // Agrega un evento de clic a cada botón    
+                // Agrega un evento de clic a cada botón
                 $(".dropbtn").click(function(event) {
                     event.stopPropagation();
 

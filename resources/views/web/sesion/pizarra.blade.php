@@ -7,8 +7,8 @@
                 viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve">
                 <path
                     d="M48.6,23H15.4c-0.9,0-1.3-1.1-0.7-1.7l9.6-9.6c0.6-0.6,0.6-1.5,0-2.1l-2.2-2.2c-0.6-0.6-1.5-0.6-2.1,0
-                                                                               L2.5,25c-0.6,0.6-0.6,1.5,0,2.1L20,44.6c0.6,0.6,1.5,0.6,2.1,0l2.1-2.1c0.6-0.6,0.6-1.5,0-2.1l-9.6-9.6C14,30.1,14.4,29,15.3,29
-                                                                               h33.2c0.8,0,1.5-0.6,1.5-1.4v-3C50,23.8,49.4,23,48.6,23z" />
+                                                                                       L2.5,25c-0.6,0.6-0.6,1.5,0,2.1L20,44.6c0.6,0.6,1.5,0.6,2.1,0l2.1-2.1c0.6-0.6,0.6-1.5,0-2.1l-9.6-9.6C14,30.1,14.4,29,15.3,29
+                                                                                       h33.2c0.8,0,1.5-0.6,1.5-1.4v-3C50,23.8,49.4,23,48.6,23z" />
             </svg> Pizarra - {{ $sesion->titulo }}</a>
         @if ($sesion->estado == \App\Models\Sesion::ACTIVO)
             <span id="estado"
@@ -66,24 +66,28 @@
                 <div style="width: 100%;">
                     <ul class="justify-center text-center bg-gray-200" style=" border-radius: 10px">
                         <li class="border-b border-slate-100 last:border-0">
-                            <a class="block py-2 hover:bg-slate-50" href="#">
+                            <button type="button" onclick="handleDownloadClick()"
+                                class="block py-2 w-full h-full justify-center hover:bg-slate-50">
                                 PNG
-                            </a>
-                        </li>
+                            </button>
+                        </li>{{-- handleDownloadJavaClick --}}
                         <li class="border-b border-slate-100 last:border-0">
-                            <a class="block py-2 hover:bg-slate-50" href="#">
+                            <button type="button" onclick="handleDownloadJavaClick()"
+                                class="block py-2 w-full h-full justify-center hover:bg-slate-50">
                                 JAVA
-                            </a>
+                            </button>
                         </li>
                         <li class="border-b border-slate-100 last:border-0">
-                            <a class="block py-2 hover:bg-slate-50" href="#">
+                            <button type="button" onclick="handleDownloadPhpClick()"
+                                class="block py-2 w-full h-full justify-center hover:bg-slate-50">
                                 PHP
-                            </a>
+                            </button>
                         </li>
                         <li class="border-b border-slate-100 last:border-0">
-                            <a class="block py-2 hover:bg-slate-50" href="#">
-                                JS
-                            </a>
+                            <button type="button" onclick="handleDownloadCppClick()"
+                                class="block py-2 w-full h-full justify-center hover:bg-slate-50">
+                                C++
+                            </button>
                         </li>
                         <li class="border-b border-slate-100 last:border-0">
                             <a class="block py-2 hover:bg-slate-50" href="#">
@@ -91,13 +95,23 @@
                             </a>
                         </li>
                     </ul>
-
+                    <span class="font-semibold text-gray-200">Guardar</span>
+                    <div style="width: 100%;">
+                        <ul class="justify-center text-center bg-gray-200" style=" border-radius: 10px">
+                            <li class="border-b border-slate-100 last:border-0">
+                                <button type="button" class="block py-2 w-full h-full justify-center hover:bg-slate-50"
+                                    href="#">
+                                    Guardar en mis archivos
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </aside>
 
             <!-- main content page -->
             <div class="w-full p-4 bg-white" id="contenedor-diagrama" data-user="{{ Auth::user()->id }}"
-                data-sesion="{{ $sesion->id }}" data-estado="{{ $sesion->estado }}" data-pizarra="{{$pizarra->id}}">
+                data-sesion="{{ $sesion->id }}" data-estado="{{ $sesion->estado }}" data-pizarra="{{ $pizarra->id }}">
                 <div id="sample" class="bg-gray-100 h-full" style="border-radius: 10px">
                     <div id="myDiagramDiv"
                         style="border-radius: 10px; border: 1px solid gray; width: 100%; height: 100%; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0);">

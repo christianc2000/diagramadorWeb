@@ -1,19 +1,18 @@
 @extends('layouts.appdiagramador')
 @section('header')
-    <a href="{{route('sesion.index')}}"
-        class="flex items-center">
+    <a href="{{ route('sesion.index') }}" class="flex items-center">
         <svg class="h-6 w-6 mr-4" fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px"
             viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve">
             <path d="M48.6,23H15.4c-0.9,0-1.3-1.1-0.7-1.7l9.6-9.6c0.6-0.6,0.6-1.5,0-2.1l-2.2-2.2c-0.6-0.6-1.5-0.6-2.1,0
-       L2.5,25c-0.6,0.6-0.6,1.5,0,2.1L20,44.6c0.6,0.6,1.5,0.6,2.1,0l2.1-2.1c0.6-0.6,0.6-1.5,0-2.1l-9.6-9.6C14,30.1,14.4,29,15.3,29
-       h33.2c0.8,0,1.5-0.6,1.5-1.4v-3C50,23.8,49.4,23,48.6,23z" />
+                       L2.5,25c-0.6,0.6-0.6,1.5,0,2.1L20,44.6c0.6,0.6,1.5,0.6,2.1,0l2.1-2.1c0.6-0.6,0.6-1.5,0-2.1l-9.6-9.6C14,30.1,14.4,29,15.3,29
+                       h33.2c0.8,0,1.5-0.6,1.5-1.4v-3C50,23.8,49.4,23,48.6,23z" />
         </svg> Sesión</a>
 @endsection
 @section('contenido')
     <div class="mx-auto py-6 sm:px-6 lg:px-8 space-y-6">
         <div class="flex items-center space-x-2">
             <h2 class="text-xl font-bold text-gray-900" id="sesion-title" data-user="{{ Auth::user()->id }}"
-                data-sesion="{{ $sesion->id }}" data-estado="{{$sesion->estado}}">{{ $sesion->titulo }}
+                data-sesion="{{ $sesion->id }}" data-estado="{{ $sesion->estado }}">{{ $sesion->titulo }}
             </h2>
             <button>
                 <svg class="h-5 w-5 text-gray-900" width="800px" height="800px" viewBox="0 0 24 24" fill="none"
@@ -33,13 +32,14 @@
         </div>
         <div class="inline-block">
             <label for="toggle-estado" class="flex items-center cursor-pointer relative">
-                <input type="checkbox" id="toggle-estado" data-user="{{ Auth::user()->id }}" data-sesion="{{ $sesion->id }}"
-                    class="sr-only" {{ $sesion->estado == \App\Models\Sesion::ACTIVO ? 'checked' : '' }}>
+                <input type="checkbox" id="toggle-estado" data-user="{{ Auth::user()->id }}"
+                    data-sesion="{{ $sesion->id }}" class="sr-only"
+                    {{ $sesion->estado == \App\Models\Sesion::ACTIVO ? 'checked' : '' }}>
                 <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
                 {{-- <span class="ml-3 text-gray-900 text-sm font-medium">Toggle me</span> --}}
             </label>
         </div>
-      
+
         <!-- component -->
         <!-- Creacte By Joker Banny -->
         <div class="h-96 w-full bg-indigo-500 rounded-lg p-3 flex flex-col justify-between items-end">
@@ -73,18 +73,57 @@
                 </button>
                 <div id="myDropdown" class="dropdown-content bg-white p-1">
                     <p class="text-gray-900 font-semibold">Exportar</p>
-                    <a href="#" class="hover:bg-gray-200 text-gray-500">XMI</a>
-                    <a href="#" class="hover:bg-gray-200 text-gray-500">PNG</a>
-                    <a href="#" class="hover:bg-gray-200 text-gray-500">JAVA</a>
-                    <a href="#" class="hover:bg-gray-200 text-gray-500">PHP</a>
-                    <a href="#" class="hover:bg-gray-200 text-gray-500">JS</a>
+                    <button type="button" onclick="handleDownloadClick()" class="hover:bg-gray-200 text-gray-500 w-full">
+                        XMI
+                    </button>
+                    <button type="button" onclick="handleDownloadClick()" class="hover:bg-gray-200 text-gray-500 w-full">
+                        PNG
+                    </button>
+                    <button type="button" onclick="handleDownloadJavaClick()"
+                        class="hover:bg-gray-200 text-gray-500 w-full">
+                        JAVA
+                    </button>
+                    <button type="button" onclick="handleDownloadPhpClick()"
+                        class="hover:bg-gray-200 text-gray-500 w-full">
+                        PHP
+                    </button>
+                    <button type="button" onclick="handleDownloadCppClick()"
+                        class="hover:bg-gray-200 text-gray-500 w-full">
+                        C++
+                    </button>
                 </div>
             </div>
+
+            <div id="myDiagramDiv"
+                style="border-radius: 10px; border: 1px solid gray; width: 100%; height: 100%; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0);">
+                <!-- Aquí va tu diagrama -->
+                <canvas tabindex="0" width="1054" height="398"
+                    style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 1054px; height: 398px;"  readonly></canvas>
+                <div
+                    style="flex-grow: 1; height: 400px; border: 1px solid black; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0);">
+                    <canvas tabindex="0" width="972" height="398"
+                        style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 972px; height: 398px;"  readonly></canvas>
+                    <div style="position: absolute; overflow: auto; width: 972px; height: 398px; z-index: 1;">
+                        <div style="position: absolute; width: 1px; height: 1px;"></div>
+                    </div>
+                </div>
+            </div>
+        
             <a href="{{ route('sesion.pizarra', $sesion->pizarras->first()->id) }}"
                 class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-900 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">Abrir
                 pizarra</a>
         </div>
         {{-- componente --}}
+        <div id="myPaletteDiv" class="bg-gray-200"
+            style="border-radius: 10px;width: 100%; height: 300px; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); display:none">
+            <canvas tabindex="0" width="78" height="300"
+                style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 100%; height: 300px;"></canvas>
+            <div style="position: absolute; overflow: auto; width: 100%; height: 300px; z-index: 1;">
+                <div style="position: absolute; width: 1px; height: 1px;"></div>
+            </div>
+        </div>
+
+        <input type="hidden" id="mySavedModel" value="{{ $sesion->pizarras->first()->diagrama }}">
 
         <div class="mt-15 grid grid-cols-1 gap-x-14 gap-y-8 sm:grid-cols-6">
             <!-- left -->
@@ -98,7 +137,8 @@
                                 <li class="p-3 flex justify-between items-center user-card">
                                     <div class="flex items-center">
                                         <div class="relative">
-                                            <img class="w-10 h-10 rounded-full object-cover" src="{{ $colaborador->foto }}"
+                                            <img class="w-10 h-10 rounded-full object-cover"
+                                                src="{{ $colaborador->foto }}"
                                                 alt="{{ $colaborador->name . ' ' . $colaborador->lastname }}">
                                             <span id="online{{ $colaborador->id }}"
                                                 class="conectados bottom-0 left-7 absolute  w-3.5 h-3.5 bg-red-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
@@ -145,12 +185,12 @@
                                 <g>
                                     <path
                                         d="M21.9,37c0-2.7,0.9-5.8,2.3-8.2c1.7-3,3.6-4.2,5.1-6.4c2.5-3.7,3-9,1.4-13c-1.6-4.1-5.4-6.5-9.8-6.4
-                                                                                                                                                                                                                                                              s-8,2.8-9.4,6.9c-1.6,4.5-0.9,9.9,2.7,13.3c1.5,1.4,2.9,3.6,2.1,5.7c-0.7,2-3.1,2.9-4.8,3.7c-3.9,1.7-8.6,4.1-9.4,8.7
-                                                                                                                                                                                                                                                              C1.3,45.1,3.9,49,8,49h17c0.8,0,1.3-1,0.8-1.6C23.3,44.5,21.9,40.8,21.9,37z" />
+                                                                                                                                                                                                                                                                              s-8,2.8-9.4,6.9c-1.6,4.5-0.9,9.9,2.7,13.3c1.5,1.4,2.9,3.6,2.1,5.7c-0.7,2-3.1,2.9-4.8,3.7c-3.9,1.7-8.6,4.1-9.4,8.7
+                                                                                                                                                                                                                                                                              C1.3,45.1,3.9,49,8,49h17c0.8,0,1.3-1,0.8-1.6C23.3,44.5,21.9,40.8,21.9,37z" />
                                     <path
                                         d="M37.9,25c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12S44.5,25,37.9,25z M44,38c0,0.6-0.5,1-1.1,1H40v3
-                                                                                                                                                                                                                                                              c0,0.6-0.5,1-1.1,1h-2c-0.6,0-0.9-0.4-0.9-1v-3h-3.1c-0.6,0-0.9-0.4-0.9-1v-2c0-0.6,0.3-1,0.9-1H36v-3c0-0.6,0.3-1,0.9-1h2
-                                                                                                                                                                                                                                                              c0.6,0,1.1,0.4,1.1,1v3h2.9c0.6,0,1.1,0.4,1.1,1V38z" />
+                                                                                                                                                                                                                                                                              c0,0.6-0.5,1-1.1,1h-2c-0.6,0-0.9-0.4-0.9-1v-3h-3.1c-0.6,0-0.9-0.4-0.9-1v-2c0-0.6,0.3-1,0.9-1H36v-3c0-0.6,0.3-1,0.9-1h2
+                                                                                                                                                                                                                                                                              c0.6,0,1.1,0.4,1.1,1v3h2.9c0.6,0,1.1,0.4,1.1,1V38z" />
                                 </g>
                             </svg>
                         </button>
@@ -331,7 +371,7 @@
             border-radius: 5px;
             /* Alinea el borde derecho del contenido con el borde derecho del botón */
             min-width: 140px;
-            z-index: 1;
+            z-index: 10;
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             background-color: #f9f9f9;
         }
@@ -340,6 +380,14 @@
             padding: 5px 10px;
             text-decoration: none;
             display: block;
+            z-index: 10;
+        }
+
+        .dropdown-content button {
+            padding: 5px 10px;
+            text-decoration: none;
+            display: block;
+            z-index: 10;
         }
 
         .dropdown-content p {
@@ -601,7 +649,7 @@
             });
 
 
-         
+
         });
     </script>
     @if (session('mensaje'))

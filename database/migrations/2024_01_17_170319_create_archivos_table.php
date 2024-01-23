@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('archivos', function (Blueprint $table) {
             $table->id();
+            $table->string('titulo');
             $table->timestamp('fecha');
-            $table->json('diagrama');
-            $table->string('url');
-            $table->string('tipo');//XMI=Archivo XMI, J=Java, P=Php, JS=Javascript
+            $table->json('diagrama');//XMI=Archivo XMI, J=Java, P=Php, JS=Javascript
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('pizarra_id')->references('id')->on('pizarras');
             $table->timestamps();

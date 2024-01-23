@@ -4,8 +4,8 @@
         <svg class="h-6 w-6 mr-4" fill="#000000" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px"
             viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve">
             <path d="M48.6,23H15.4c-0.9,0-1.3-1.1-0.7-1.7l9.6-9.6c0.6-0.6,0.6-1.5,0-2.1l-2.2-2.2c-0.6-0.6-1.5-0.6-2.1,0
-                                            L2.5,25c-0.6,0.6-0.6,1.5,0,2.1L20,44.6c0.6,0.6,1.5,0.6,2.1,0l2.1-2.1c0.6-0.6,0.6-1.5,0-2.1l-9.6-9.6C14,30.1,14.4,29,15.3,29
-                                            h33.2c0.8,0,1.5-0.6,1.5-1.4v-3C50,23.8,49.4,23,48.6,23z" />
+                                                        L2.5,25c-0.6,0.6-0.6,1.5,0,2.1L20,44.6c0.6,0.6,1.5,0.6,2.1,0l2.1-2.1c0.6-0.6,0.6-1.5,0-2.1l-9.6-9.6C14,30.1,14.4,29,15.3,29
+                                                        h33.2c0.8,0,1.5-0.6,1.5-1.4v-3C50,23.8,49.4,23,48.6,23z" />
         </svg> Sesión</a>
 @endsection
 @section('contenido')
@@ -61,15 +61,15 @@
                                     <g transform="translate(1115.000000, 746.000000)" id="Shape">
                                         <path
                                             d="M6,10 C4.8954305,10 4,10.8954305 4,12 C4,13.1045695 4.8954305,14 6,14 C7.1045695,14 8,13.1045695 8,12 C8,10.8954305 7.1045695,10 6,10 Z">
-
+    
                                         </path>
                                         <path
                                             d="M12,10 C10.8954305,10 10,10.8954305 10,12 C10,13.1045695 10.8954305,14 12,14 C13.1045695,14 14,13.1045695 14,12 C14,10.8954305 13.1045695,10 12,10 Z">
-
+    
                                         </path>
                                         <path
                                             d="M18,10 C16.8954305,10 16,10.8954305 16,12 C16,13.1045695 16.8954305,14 18,14 C19.1045695,14 20,13.1045695 20,12 C20,10.8954305 19.1045695,10 18,10 Z">
-
+    
                                         </path>
                                     </g>
                                 </g>
@@ -77,12 +77,40 @@
                         </svg>
                     </button>
                     <div id="myDropdown" class="dropdown-content bg-white p-1">
-                        <p class="text-gray-700 font-semibold">Exportar</p>
-                        <a href="#" class="hover:bg-gray-200 text-gray-500">XMI</a>
-                        <a href="#" class="hover:bg-gray-200 text-gray-500">PNG</a>
-                        <a href="#" class="hover:bg-gray-200 text-gray-500">JAVA</a>
-                        <a href="#" class="hover:bg-gray-200 text-gray-500">PHP</a>
-                        <a href="#" class="hover:bg-gray-200 text-gray-500">JS</a>
+                        <p class="text-gray-900 font-semibold">Exportar</p>
+                        <button type="button" onclick="handleDownloadClick()" class="hover:bg-gray-200 text-gray-500 w-full">
+                            XMI
+                        </button>
+                        <button type="button" onclick="handleDownloadClick()" class="hover:bg-gray-200 text-gray-500 w-full">
+                            PNG
+                        </button>
+                        <button type="button" onclick="handleDownloadJavaClick()"
+                            class="hover:bg-gray-200 text-gray-500 w-full">
+                            JAVA
+                        </button>
+                        <button type="button" onclick="handleDownloadPhpClick()"
+                            class="hover:bg-gray-200 text-gray-500 w-full">
+                            PHP
+                        </button>
+                        <button type="button" onclick="handleDownloadCppClick()"
+                            class="hover:bg-gray-200 text-gray-500 w-full">
+                            C++
+                        </button>
+                    </div>
+                </div>
+    
+                <div id="myDiagramDiv"
+                    style="border-radius: 10px; border: 1px solid gray; width: 100%; height: 100%; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0);">
+                    <!-- Aquí va tu diagrama -->
+                    <canvas tabindex="0" width="1054" height="398"
+                        style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 1054px; height: 398px;"  readonly></canvas>
+                    <div
+                        style="flex-grow: 1; height: 400px; border: 1px solid black; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0);">
+                        <canvas tabindex="0" width="972" height="398"
+                            style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 972px; height: 398px;"  readonly></canvas>
+                        <div style="position: absolute; overflow: auto; width: 972px; height: 398px; z-index: 1;">
+                            <div style="position: absolute; width: 1px; height: 1px;"></div>
+                        </div>
                     </div>
                 </div>
                 <a href="{{ route('sesion.pizarra', $sesion->pizarras->first()->id) }}" id="abrir-pizarra"
@@ -91,6 +119,28 @@
                     pizarra</a>
             </div>
             {{-- componente --}}
+            <div id="myPaletteDiv" class="bg-gray-200"
+                style="border-radius: 10px;width: 100%; height: 300px; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); display:none">
+                <canvas tabindex="0" width="78" height="300"
+                    style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 100%; height: 300px;"></canvas>
+                <div style="position: absolute; overflow: auto; width: 100%; height: 300px; z-index: 1;">
+                    <div style="position: absolute; width: 1px; height: 1px;"></div>
+                </div>
+            </div>
+            <div id="myDiagramDiv"
+                style="border-radius: 10px; border: 1px solid gray; width: 100%; height: 100%; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); display:none">
+                <canvas tabindex="0" width="1054" height="398"
+                    style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 1054px; height: 398px;"></canvas>
+                <div id="myDiagramDiv"
+                    style="flex-grow: 1; height: 400px; border: 1px solid black; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0);">
+                    <canvas tabindex="0" width="972" height="398"
+                        style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 972px; height: 398px;"></canvas>
+                    <div style="position: absolute; overflow: auto; width: 972px; height: 398px; z-index: 1;">
+                        <div style="position: absolute; width: 1px; height: 1px;"></div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="mySavedModel" value="{{ $sesion->pizarras->first()->diagrama }}">
             <div class="mt-15 grid grid-cols-1 gap-x-14 gap-y-8 sm:grid-cols-6">
                 <!-- left -->
                 <div class="col-span-3 space-y-3">
@@ -231,7 +281,7 @@
             border-radius: 5px;
             /* Alinea el borde derecho del contenido con el borde derecho del botón */
             min-width: 140px;
-            z-index: 1;
+            z-index: 10;
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             background-color: #f9f9f9;
         }
@@ -240,7 +290,16 @@
             padding: 5px 10px;
             text-decoration: none;
             display: block;
+            z-index: 10;
         }
+
+        .dropdown-content button {
+            padding: 5px 10px;
+            text-decoration: none;
+            display: block;
+            z-index: 10;
+        }
+
 
         .dropdown-content p {
             padding: 5px 10px;
@@ -265,7 +324,7 @@
     {{-- JS --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://unpkg.com/@themesberg/flowbite@1.1.0/dist/flowbite.bundle.js"></script>
-    
+
     @if (session('mensaje'))
         <script>
             toastr.options = {

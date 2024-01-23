@@ -119,9 +119,16 @@ class SesionController extends BaseController
             return $this->sendError('Error de validación', $validator->errors(), 422); // 422 es el código de respuesta HTTP para errores de validación
         }
         $pizarra = Pizarra::find($request->pizarra_id);
-        $pizarra->diagrama =$request->diagrama;  
-        $pizarra->fecha_guardado=Carbon::now()->toDateTimeString();
+        $pizarra->diagrama = $request->diagrama;
+        $pizarra->fecha_guardado = Carbon::now()->toDateTimeString();
         $pizarra->save();
-        return $this->sendResponse($pizarra,'success');
+        return $this->sendResponse($pizarra, 'success');
     }
+    // public function descargarJAVA(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'pizarra_id' => 'exists:pizarras,id',
+    //         'diagrama' => 'json'
+    //     ]);
+    // }
 }

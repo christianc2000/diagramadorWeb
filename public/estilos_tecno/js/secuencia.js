@@ -11,7 +11,7 @@ function init() {
   myDiagram =
     new go.Diagram("myDiagramDiv", // must be the ID or reference to an HTML DIV
       {
-        allowCopy: false,
+        allowCopy: true,
         linkingTool: $(MessagingTool),  // defined below
         "resizingTool.isGridSnapEnabled": true,
         draggingTool: $(MessageDraggingTool),  // defined below
@@ -34,6 +34,7 @@ function init() {
       if (idx >= 0) document.title = document.title.slice(0, idx);
     }
   });
+
 
   // define the Lifeline Node template.
   myDiagram.groupTemplate =
@@ -316,7 +317,7 @@ function init() {
       $(go.TextBlock,
         {
           alignment: go.Spot.TopLeft,
-          margin: new go.Margin(5, 0, 0,26),
+          margin: new go.Margin(5, 0, 0, 26),
           textAlign: "left",
           overflow: go.TextBlock.OverflowEllipsis,
           editable: true
@@ -389,10 +390,7 @@ function init() {
               "nodeDataArray": nodeDataArray,
               "linkDataArray": linkDataArray
             };
-            socket.emit('moverDiagrama', {
-              canal: "canal" + sesionId,
-              diagrama: diagrama
-            });
+          
             console.log("Se emitió el diagrama actualizado");
             processedChange = true;  // Actualizar la variable de control
             var url = new URL('api/save-diagram', window.location.origin);
@@ -401,19 +399,25 @@ function init() {
               pizarra_id: pizarra,
               diagrama: diagramaJSON
             };
-
-            fetch(url, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data)
-            })
-              .then(response => response.json())
-              .then(data => console.log(data))
-              .catch((error) => {
-                console.error('Error:', error);
+            if (isPizarraRoute) {
+              socket.emit('moverDiagrama', {
+                canal: "canal" + sesionId,
+                diagrama: diagrama
               });
+              fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+              })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch((error) => {
+                  console.error('Error:', error);
+                });
+            }
+
 
           }
         });
@@ -426,8 +430,8 @@ function init() {
   const initialModel = [
     { text: "object", stereotype: "OBJECT", isGroup: true, duration: 2 },
     // { text: "ref", title: "ref", mensaje: "[Mensaje]", stereotype: "OBJECT", category: "Ref", loc: new go.Point(20, 20) },
-    { text: "alt", tipo: "Alt", title: "[Alt]", optiont: "[true]", optionf: "[false]", stereotype: "OBJECT", category: "Alt", loc: new go.Point(0, 0) },
-    { text: "loop", tipo: "Loop", title: "[Loop]", condicion: "[Condición]", stereotype: "OBJECT", category: "Loop", loc: new go.Point(20, 20) },
+    { text: "alt", tipo: "Alt", title: "[Alt]", optiont: "[true]", optionf: "[false]", stereotype: "FRAGMENT", category: "Alt", loc: new go.Point(0, 0) },
+    { text: "loop", tipo: "Loop", title: "[Loop]", condicion: "[Condición]", stereotype: "FRAGMENT", category: "Loop", loc: new go.Point(20, 20) },
 
     // { key: "Fragment", category: "Loop", text: "loop", loc: new go.Point(20, 20) },
   ];
@@ -467,6 +471,171 @@ function init() {
 //     }
 //   }
 // }
+// const handleDownloadClick = () => {
+//   if (myDiagram) {
+//       const imgData = myDiagram.makeImageData({ scale: 1 });
+
+//       // crea un elemento <a> para descargar la imagen
+//       let aElement = document.createElement('a');
+//       aElement.href = imgData;
+//       aElement.download = 'diagrama.png';  // nombre del archivo descargado
+
+//       // añade el elemento <a> al cuerpo del documento y haz clic en él
+//       document.body.appendChild(aElement);
+//       aElement.click();
+
+//       // elimina el elemento <a> después de la descarga
+//       document.body.removeChild(aElement);
+//   }
+// };
+const verificaDiagrama = () => {
+  if (!isPizarraRoute) {
+    console.log("No está en pizarra el Diagrama");
+    myDiagram.allowMove = false;
+    myDiagram.allowCopy = false;
+    myDiagram.allowDelete = false;
+    myDiagram.allowScroll = false;
+    myDiagram.allowZoom = false;
+    myDiagram.undoManager.isEnabled = false;
+  }
+}
+// METODO PARA DESCARGAR IMAGEN EN PNG
+const handleDownloadClick = () => {
+  if (myDiagram) {
+    const imgData = myDiagram.makeImageData({ scale: 1 });
+
+    // Crea una etiqueta <img> y establece la URI de datos como src
+    let imgElement = document.createElement('img');
+    imgElement.src = imgData;
+
+    // Crea un elemento <a> para descargar la imagen
+    let aElement = document.createElement('a');
+    aElement.href = imgData;
+    aElement.download = 'diagrama.png';  // Nombre del archivo descargado
+
+    // Añade el elemento <a> al cuerpo del documento y haz clic en él
+    document.body.appendChild(aElement);
+    aElement.click();
+
+    // Elimina el elemento <a> después de la descarga
+    document.body.removeChild(aElement);
+  }
+};
+// METODO PARA CREAR UN ARCHIVO Y CLASE EN JAVA
+const handleDownloadJavaClick = () => {
+  if (myDiagram) {
+    const arr = myDiagram.model.nodeDataArray;
+    console.log("arr: ", arr);
+    // Iterar sobre el array de nodos
+    arr.forEach(node => {
+      // Comprobar si el atributo 'stereotype' del nodo es 'OBJECT'
+      if (node.stereotype === 'OBJECT') {
+        // Extraer el nombre de la clase del atributo 'text' del nodo
+        const className = node.text;
+        console.log("className: ", className);
+        // Crear el contenido de la clase Java
+        var javaClassContent = "public class " + className + " {\n\n}";
+        console.log(javaClassContent);
+        // Crear un elemento Blob con el contenido de la clase Java
+        var blob = new Blob([javaClassContent], { type: "text/plain;charset=utf-8" });
+
+        // Crear un objeto URL para el Blob
+        var url = URL.createObjectURL(blob);
+
+        // Crear un elemento <a> para descargar la clase Java
+        var aElement = document.createElement('a');
+        aElement.href = url;
+        aElement.download = className + '.java';  // nombre del archivo descargado
+
+        // Añadir el elemento <a> al cuerpo del documento
+        document.body.appendChild(aElement);
+
+        // Descargar el archivo haciendo clic en el elemento <a>
+        aElement.click();
+
+        // Eliminar el elemento <a> después de la descarga
+        document.body.removeChild(aElement);
+      }
+    });
+  }
+};
+// PARA PHP
+const handleDownloadPhpClick = () => {
+  if (myDiagram) {
+    const arr = myDiagram.model.nodeDataArray;
+    console.log("arr: ", arr);
+    // Iterar sobre el array de nodos
+    arr.forEach(node => {
+      // Comprobar si el atributo 'stereotype' del nodo es 'OBJECT'
+      if (node.stereotype === 'OBJECT') {
+        // Extraer el nombre de la clase del atributo 'text' del nodo
+        const className = node.text;
+        console.log("className: ", className);
+        // Crear el contenido de la clase PHP
+        var phpClassContent = "<?php\n\nclass " + className + " {\n\n}\n\n?>";
+        console.log(phpClassContent);
+        // Crear un elemento Blob con el contenido de la clase PHP
+        var blob = new Blob([phpClassContent], { type: "text/plain;charset=utf-8" });
+
+        // Crear un objeto URL para el Blob
+        var url = URL.createObjectURL(blob);
+
+        // Crear un elemento <a> para descargar la clase PHP
+        var aElement = document.createElement('a');
+        aElement.href = url;
+        aElement.download = className + '.php';  // nombre del archivo descargado
+
+        // Añadir el elemento <a> al cuerpo del documento
+        document.body.appendChild(aElement);
+
+        // Descargar el archivo haciendo clic en el elemento <a>
+        aElement.click();
+
+        // Eliminar el elemento <a> después de la descarga
+        document.body.removeChild(aElement);
+      }
+    });
+  }
+};
+// PARA C++
+const handleDownloadCppClick = () => {
+  if (myDiagram) {
+    const arr = myDiagram.model.nodeDataArray;
+    console.log("arr: ", arr);
+    // Iterar sobre el array de nodos
+    arr.forEach(node => {
+      // Comprobar si el atributo 'stereotype' del nodo es 'OBJECT'
+      if (node.stereotype === 'OBJECT') {
+        // Extraer el nombre de la clase del atributo 'text' del nodo
+        const className = node.text;
+        console.log("className: ", className);
+        // Crear el contenido de la clase C++
+        var cppClassContent = "class " + className + " {\n\n};";
+        console.log(cppClassContent);
+        // Crear un elemento Blob con el contenido de la clase C++
+        var blob = new Blob([cppClassContent], { type: "text/plain;charset=utf-8" });
+
+        // Crear un objeto URL para el Blob
+        var url = URL.createObjectURL(blob);
+
+        // Crear un elemento <a> para descargar la clase C++
+        var aElement = document.createElement('a');
+        aElement.href = url;
+        aElement.download = className + '.cpp';  // nombre del archivo descargado
+
+        // Añadir el elemento <a> al cuerpo del documento
+        document.body.appendChild(aElement);
+
+        // Descargar el archivo haciendo clic en el elemento <a>
+        aElement.click();
+
+        // Eliminar el elemento <a> después de la descarga
+        document.body.removeChild(aElement);
+      }
+    });
+  }
+};
+
 function ensureLifelineHeights(e) {
   // iterate over all Activities (ignore Groups)
   const arr = myDiagram.model.nodeDataArray;
@@ -712,6 +881,15 @@ function save() {
 }
 function load() {
   myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+  if (!isPizarraRoute) {
+    console.log("No está en pizarra el Diagrama");
+    myDiagram.allowMove = false;
+    myDiagram.allowCopy = false;
+    myDiagram.allowDelete = false;
+    myDiagram.allowScroll = false;
+    myDiagram.allowZoom = false;
+    myDiagram.undoManager.isEnabled = false;
+  }
 }
 
 window.addEventListener('DOMContentLoaded', init);
