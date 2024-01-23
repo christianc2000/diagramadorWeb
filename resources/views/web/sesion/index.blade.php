@@ -284,8 +284,9 @@
             socket.on('sesionActiva', function(sesion) {
                 console.log('sesion activa:', sesion);
                 let str = sesion;
-                let num = str.replace(/\D/g, '');
+                let num = str.substring(5); 
                 var spans = $(".estado" + num);
+                console.log("buscando el span: .estado"+num);
                 spans.each(function() {
                     $(this).removeClass('text-red-600 bg-red-100 dark:text-red-400');
                     $(this).addClass('text-green-600 bg-green-100 dark:text-green-400');
@@ -294,9 +295,11 @@
                 console.log(num)
             });
 
-            socket.on('canalCerrado', function(canal) {
+            socket.on('canalCerrado', function(datos) {
+                var canal=datos.canal;
+                console.log("canal cerrado: ",canal);
                 let str = canal;
-                let num = str.replace(/\D/g, '');
+                let num = str.substring(5); 
                 var spans = $(".estado" + num);
                 spans.each(function() {
                     $(this).removeClass('text-green-600 bg-green-100 dark:text-green-400');

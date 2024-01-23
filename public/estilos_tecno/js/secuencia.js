@@ -319,7 +319,7 @@ function init() {
           margin: new go.Margin(5, 0, 0,26),
           textAlign: "left",
           overflow: go.TextBlock.OverflowEllipsis,
-          // editable: true
+          editable: true
         },
         new go.Binding("text", "title").makeTwoWay()),
       $(go.TextBlock,
