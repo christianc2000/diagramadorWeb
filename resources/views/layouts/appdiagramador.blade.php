@@ -36,8 +36,8 @@
     <script>
         // let ip_address = "192.168.0.14"
         let ip_address = "https://diagramadorsocket.onrender.com"
-        let port = "3000";
-        let socket = io(ip_address + ":" + port);
+        // let port = "3000";
+        let socket = io(ip_address);// + ":" + port);
     </script>
     {{-- bootstrap 5 --}}
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
