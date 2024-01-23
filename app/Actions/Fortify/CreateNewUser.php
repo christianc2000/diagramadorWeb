@@ -29,6 +29,7 @@ class CreateNewUser implements CreatesNewUsers
         return User::create([
             'name' => $input['name'],
             'username'=>$input['name'].rand(100000, 999999),
+            'foto'=>"https://rekognitions3-bucket.s3.amazonaws.com/fotografia_app/perfil/user_sin_foto.png",
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
