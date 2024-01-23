@@ -1,0 +1,10 @@
+.containerPrincipal {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.body-background {
+    background-image: url('../img/fotografia_fondo.jpg');
+    background-size: cover; /* Asegura que la imagen cubra todo el elemento */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+}

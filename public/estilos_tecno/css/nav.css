@@ -1,0 +1,17 @@
+.menu-link {
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: rgba(128, 128, 128, 0.3); /* Gray with 80% opacity */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.menu-link:hover {
+    background-color: rgba(74, 74, 74, 0.2); /* Slightly darker gray with 80% opacity */
+    color: white;
+}
+
+.menu-link.active {
+    background-color: rgba(26, 26, 26, 0.2); /* Darker gray with 90% opacity */
+    color: white;
+}

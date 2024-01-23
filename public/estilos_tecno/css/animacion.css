@@ -1,0 +1,60 @@
+.header-container {
+    position: relative;
+    height: 560px;
+    overflow: hidden;
+}
+
+
+.header-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.header-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Ajusta el valor alpha (cuarto valor) para cambiar la opacidad */
+}
+
+
+.title-container {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #0080FF;
+    font-size: 2em;
+    font-weight: bold; /* Hace la letra más gruesa */
+}
+
+.title-static {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #FFF; /* Color blanco para el texto */
+    font-size: 2.5em; /* Tamaño ligeramente más grande que el título animado */
+    font-weight: bold; /* Letras más gruesas */
+    opacity: 1; /* Opacidad ligeramente reducida */
+}
+/* Cursor de escritura intermitente */
+.typed-cursor {
+    opacity: 1;
+    animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}

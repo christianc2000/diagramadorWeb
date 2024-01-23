@@ -1,0 +1,44 @@
+header.navegacion {
+    background-color: #708090 !important;
+}
+
+nav.navegacion {
+    background-color: #2F4F4F !important;
+}
+.background-button {
+    background-color: #2F4F4F !important;
+}
+.color-texto {
+    color: #FFFFFF !important;
+    /* Cambia a tu color preferido */
+}
+
+.subtitulo1 {
+    color: #FFFFFF !important
+}
+.subtitulo2 {
+    color: #FFFFFF !important;
+    font-weight: bold;
+    font-size: 16px; /* Elige el tamaño de fuente que desees */
+}
+.subtitulo3 {
+    color: #B4B4B4 !important;
+    font-weight: 400;
+    font-size: 16px;
+}
+.subtitulo4 {
+    color: #B4B4B4 !important;
+    font-weight: 300;
+    font-size: 16px;
+}
+.containerPrincipal {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.body-background {
+    background-color: #274242;
+}
+.card-background{
+    background-color: #708090;
+}

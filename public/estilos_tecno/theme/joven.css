@@ -1,0 +1,47 @@
+header.navegacion {
+    background-color: #FFFFFF !important;
+}
+
+nav.navegacion {
+    background-color: #FFFFFF !important;
+}
+.background-button {
+    background-color: #FFFFFF !important;
+}
+.color-texto {
+    color: #0080FF !important;
+    /* Cambia a tu color preferido */
+}
+
+.subtitulo1 {
+    color: #0080FF !important
+}
+.subtitulo2 {
+    color: #283C3C !important;
+    font-weight: bold;
+    font-size: 16px; /* Elige el tamaño de fuente que desees */
+}
+.subtitulo3 {
+    color: #283C3C !important;
+    font-weight: 400;
+    font-size: 16px;
+}
+.subtitulo4 {
+    color: #283C3C !important;
+    font-weight: 300;
+    font-size: 16px;
+}
+.containerPrincipal {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.body-background {
+    background-image: url('../img/fondo_juvenil9.jpg');
+    background-size: cover; /* Asegura que la imagen cubra todo el elemento */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+.card-background{
+    background-color: #ffffff;
+}
